@@ -12,8 +12,16 @@ const port = process.env.PORT || 3000
 
 app.use(express.static(publicDirectoryPath))
 
-io.on('connection', () => {
+const displayMessage = 'Welcome!'
+
+io.on('connection', (socket) => {
     console.log('New Connection Setup')
+    
+    socket.emit('clientmessage', displayMessage)
+
+    socket.on('userSubmit', (message) => {
+        io.emit('clientmessage', message)
+    })
 })
 
 server.listen(port, () => {
